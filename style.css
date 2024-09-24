@@ -165,3 +165,8 @@ main {
   font-weight: 700;
   color: #c7365f;
 }
+
+/* This class hides elements by setting their display to none */
+.hidden {
+  display: none;
+}
