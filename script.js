@@ -14,15 +14,27 @@ const btnNew = document.querySelector('.btn--new');
 const btnRoll = document.querySelector('.btn--roll');
 const btnHold = document.querySelector('.btn--hold');
 
-score0El.textContent = 0;
-score1El.textContent = 0; // We are assigning numbers here, not strings, but JavaScript automatically converts these to strings for display on the page.
+let scores, currentScore, activePlayer, playing;
 
-diceEl.classList.add('hidden'); // Add the 'hidden' class to the dice element to hide it
+// Starting conditions
+const init = function () {
+  scores = [0, 0];
+  currentScore = 0;
+  activePlayer = 0;
+  playing = true;
 
-const scores = [0, 0]; // Total points for both players (index 0: player 1, index 1: player 2)
-let currentScore = 0; // The 'currentScore' variable must be outside the function to avoid resetting it to zero every time the button is clicked.
-let activePlayer = 0; // Track the active player (0: player 1, 1: player 2)
-let playing = true;
+  score0El.textContent = 0;
+  score1El.textContent = 0;
+  current0El.textContent = 0;
+  current1El.textContent = 0;
+  diceEl.classList.add('hidden');
+
+  player0El.classList.remove('player--winner');
+  player1El.classList.remove('player--winner');
+  player0El.classList.add('player--active');
+  player1El.classList.remove('player--active');
+};
+init();
 
 const switchPlayer = function () {
   document.getElementById(`current--${activePlayer}`).textContent = 0; // Reset current score for active player
@@ -65,16 +77,19 @@ btnHold.addEventListener('click', function () {
 
     // 2. Check if player's score is >= 100
     // Finish the game
-    playing = false;
+    diceEl.classList.add('hidden');
     if (scores[activePlayer] >= 100) {
       document
         .querySelector(`.player--${activePlayer}`)
-        .classList.add('player--active');
+        .classList.add('player--winner');
       document
         .querySelector(`.player--${activePlayer}`)
         .classList.remove('player--active');
+    } else {
+      // Switch to the next player
+      switchPlayer();
     }
-    // Switch to the next player
-    switchPlayer();
   }
 });
+
+btnNew.addEventListener('click', init);
